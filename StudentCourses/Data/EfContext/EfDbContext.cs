@@ -1,12 +1,9 @@
-﻿using FurnitureStore.Data.Entities.AppUeser;
+﻿using StudentCourses.Data.Entities.AppUeser;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using StudentCourses.Data.Configurations;
 using StudentCourses.Data.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace StudentCourses.Data.EfContext
 {
@@ -19,10 +16,21 @@ namespace StudentCourses.Data.EfContext
         {
 
         }
-        public virtual DbSet<BaseProfile> BaseProfiles { get; set; }
-        public virtual DbSet<Course> Courses { get; set; }
-        public virtual DbSet <Dificalty> Dificalties { get; set; }
-        public virtual DbSet<Duration> Durations { get; set; }
-        public virtual DbSet<Subject> Subjects { get; set; }
+
+        public virtual DbSet<Course> Course { get; set; }
+        public virtual DbSet<Image> Image { get; set; }
+        public virtual DbSet<UserCourses> UserCourse { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+            modelBuilder.ApplyConfiguration(new CourseConfiguration());
+            modelBuilder.ApplyConfiguration(new ImageConfiguration());
+            modelBuilder.ApplyConfiguration(new DbUserRoleConfiguration());
+            modelBuilder.ApplyConfiguration(new DbUserConfiguration());
+            modelBuilder.ApplyConfiguration(new DbRoleConfiguration());
+            modelBuilder.ApplyConfiguration(new UserCoursesConfiguration());
+        }
     }
 }

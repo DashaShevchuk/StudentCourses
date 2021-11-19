@@ -46,7 +46,7 @@ class UserNavbar extends Component {
       <div className="animated fadeIn">
    <MDBNavbar color='indigo' dark expand='md' fixed='top' scrolling>
             <MDBNavbarBrand href='/' className='py-0 font-weight-bold'>
-              <strong className='align-middle'>USER</strong>
+              <strong className='align-middle'>ADMIN</strong>
             </MDBNavbarBrand>
             <MDBCollapse id='mainNavbarCollapse'>
               <MDBNavbarNav right>

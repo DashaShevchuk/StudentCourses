@@ -1,15 +1,21 @@
-using FurnitureStore.Data.Entities.AppUeser;
+using System;
+using StudentCourses.Data.EfContext;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using StudentCourses.Data.EfContext;
+using StudentCourses.Data.Entities.AppUeser;
+using StudentCourses.Services;
+using System.Text;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.HttpOverrides;
+using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
+using StudentCourses.Data.SeedData;
 
 namespace StudentCourses
 {
@@ -25,14 +31,19 @@ namespace StudentCourses
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCors();
+
             services.AddDbContext<EfDbContext>(options =>
-           options.UseSqlServer(
-               Configuration.GetConnectionString("StudentCoursesDataBase")));
+            options.UseSqlServer(
+                Configuration.GetConnectionString("StudentCoursesDataBase")));
 
             services.AddIdentity<DbUser, DbRole>(options => options.Stores.MaxLengthForKeys = 128)
                 .AddEntityFrameworkStores<EfDbContext>()
                 .AddDefaultTokenProviders();
-            services.AddControllersWithViews();
+
+            services.AddTransient<IJwtTokenService, JwtTokenService>();
+
+            var signingKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration.GetValue<string>("SecretPhrase")));
 
             services.Configure<IdentityOptions>(options =>
             {
@@ -43,18 +54,52 @@ namespace StudentCourses
                 //options.Tokens.
             });
 
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(cfg =>
+            {
+                cfg.RequireHttpsMetadata = false;
+                cfg.SaveToken = true;
+                cfg.TokenValidationParameters = new TokenValidationParameters()
+                {
+                    IssuerSigningKey = signingKey,
+                    ValidateAudience = false,
+                    ValidateIssuer = false,
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+                    // set ClockSkew is zero
+                    ClockSkew = TimeSpan.Zero
+                };
+            });
+
             services.AddControllersWithViews();
+
+
+            //services.AddSession();
 
             // In production, the React files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
             {
                 configuration.RootPath = "ClientApp/build";
             });
+            //services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            app.UseCors(
+               builder => builder.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin());
+
+            app.UseForwardedHeaders(new ForwardedHeadersOptions
+            {
+                ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+            });
+
+            app.UseAuthentication();
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -62,16 +107,17 @@ namespace StudentCourses
             else
             {
                 app.UseExceptionHandler("/Error");
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-                app.UseHsts();
             }
 
+
+
             app.UseAuthentication();
-            app.UseHttpsRedirection();
+            app.UseRouting();
+            app.UseAuthorization();
             app.UseStaticFiles();
             app.UseSpaStaticFiles();
+            app.UseHttpsRedirection();
 
-            app.UseRouting();
 
             app.UseEndpoints(endpoints =>
             {
@@ -89,6 +135,7 @@ namespace StudentCourses
                     spa.UseReactDevelopmentServer(npmScript: "start");
                 }
             });
+            Seed.SeedData(app.ApplicationServices, env, this.Configuration).Wait();
         }
     }
 }
