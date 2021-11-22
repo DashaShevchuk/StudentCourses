@@ -37,7 +37,7 @@ namespace StudentCourses.Services
             List<Claim> claims = new List<Claim>()
             {
                 new Claim("id",user.Id),
-                new Claim("name",user.Name+" "+user.Surname+" "+user.LastName)
+                new Claim("name",user.Name+" "+user.LastName)
                 //new Claim("image",image)
             };
             foreach (var el in roles)

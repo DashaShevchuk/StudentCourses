@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 import PropTypes, { object } from 'prop-types';
 import { connect } from "react-redux";
 import * as loginActions from './reducer';
@@ -85,9 +86,9 @@ class Login extends Component {
 
     let errors = {};
 
-    if (email === '') errors.email = "Поле є обов'язковим";
+    if (email === '') errors.email = "This field is required";
 
-    if (password === '') errors.password = "Поле є обов'язковим";
+    if (password === '') errors.password = "This field is required";
 
     const isValid = Object.keys(errors).length === 0
     if (isValid) {
@@ -106,7 +107,7 @@ class Login extends Component {
   
   render() {
     const { iconInput, typeInput } = this.state;
-    const { errors, isLoading, profileUrl, visible, errorsServer } = this.state;
+    const { errorsServer } = this.state;
                      
     const form = (
    <div className="main-div background-image" style={{backgroundImage:"url("+Background+")"}}> 
@@ -114,10 +115,10 @@ class Login extends Component {
   <MDBRow style={{height: '100vh' }} className="justify-content-center align-items-center">
     <MDBCol md="5">
       <form onSubmit={this.onSubmitForm}>
-        <p className="h5 text-center mb-4">Welcome!</p>
+        <p className="h5 text-center mb-4">Wellcome!</p>
         {LoadErrors(errorsServer)}
         <div className="grey-text">
-          <MDBInput label="Email"
+          <MDBInput label="Email" 
           icon="envelope" 
           group type="email" 
           validate error="wrong"
@@ -139,9 +140,17 @@ class Login extends Component {
                 onChange={this.handleChange}
               />
         </div>
-        <div className="text-center">
-          <MDBBtn color="brown" outline type="submit">Log in</MDBBtn>
-        </div>
+            <div className="d-flex justify-content-center">
+              <div className="p-2 bd-highlight">
+                <MDBBtn color="brown" type="submit" className="px-3">Log in</MDBBtn>
+              </div>
+
+              <div className="p-2 bd-highlight">
+                <Link to="/register">
+                  <MDBBtn color="brown" className="px-3">Registartion</MDBBtn>
+                </Link>
+              </div>
+            </div>
       </form>
     </MDBCol>
   </MDBRow>

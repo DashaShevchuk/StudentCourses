@@ -84,7 +84,7 @@ export const login = model => {
         }
       )
       .catch(err => {
-        dispatch(loginActions.failed(err.response));
+       dispatch(loginActions.failed(err.response));
         redirectStatusCode(err.response);
       });
   };
@@ -98,15 +98,21 @@ function getUrlToRedirect() {
   let path = "";
   if (Array.isArray(roles)) {
     for (let i = 0; i < roles.length; i++) {
-      if (roles[i] == "Admin") {
-        path = "/admin";
-        break;
-      } else if (roles[i] === "User") {
+      if (roles[i] == "User") {
         path = "/user";
         break;
-      } 
+      } else if (roles[i] === "Admin") {
+        path = "/admin";
+        break;
+      }
     }
-  } 
+  } else {
+    if (roles == "User") {
+      path = "/user";
+    } else if (roles === "Admin") {
+      path = "/admin";
+    }
+  }
 
   return path;
 }

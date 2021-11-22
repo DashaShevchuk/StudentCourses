@@ -18,7 +18,6 @@ namespace StudentCourses.Data.EfContext
         }
 
         public virtual DbSet<Course> Course { get; set; }
-        public virtual DbSet<Image> Image { get; set; }
         public virtual DbSet<UserCourses> UserCourse { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -26,7 +25,6 @@ namespace StudentCourses.Data.EfContext
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.ApplyConfiguration(new CourseConfiguration());
-            modelBuilder.ApplyConfiguration(new ImageConfiguration());
             modelBuilder.ApplyConfiguration(new DbUserRoleConfiguration());
             modelBuilder.ApplyConfiguration(new DbUserConfiguration());
             modelBuilder.ApplyConfiguration(new DbRoleConfiguration());

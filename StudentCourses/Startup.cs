@@ -1,21 +1,28 @@
-using System;
 using StudentCourses.Data.EfContext;
+using StudentCourses.Data.Entities.AppUeser;
+using StudentCourses.Services;
+using StudentCourses.Data.SeedData;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using StudentCourses.Data.Entities.AppUeser;
-using StudentCourses.Services;
-using System.Text;
 using Microsoft.IdentityModel.Tokens;
+using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using System;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpOverrides;
+using Microsoft.OpenApi.Models;
+using System.Collections.Generic;
+using System.Reflection;
+using System.IO;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
-using StudentCourses.Data.SeedData;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Hosting;
+using Microsoft.AspNetCore.Mvc;
 
 namespace StudentCourses
 {
@@ -31,6 +38,7 @@ namespace StudentCourses
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddControllers();
             services.AddCors();
 
             services.AddDbContext<EfDbContext>(options =>
@@ -74,6 +82,46 @@ namespace StudentCourses
                 };
             });
 
+            //services.AddSwaggerGen(c =>
+            //{
+            //    c.SwaggerDoc("v1", new OpenApiInfo
+            //    {
+            //        Version = "v1",
+            //        Title = "StudnetCourses API",
+            //        Description = "A project  ASP.NET Core Web API",
+            //        TermsOfService = new Uri("https://example.com/terms"),
+            //        Contact = new OpenApiContact
+            //        {
+            //            Name = "Team EJournal",
+            //            Email = string.Empty,
+            //        },
+
+            //    });
+            //    c.AddSecurityDefinition("Bearer",
+            //        new OpenApiSecurityScheme
+            //        {
+            //            Description = "JWT Authorization header using the Bearer scheme.",
+            //            Type = SecuritySchemeType.Http,
+            //            Scheme = "bearer"
+            //        });
+            //    c.AddSecurityRequirement(new OpenApiSecurityRequirement{
+            //        {
+            //            new OpenApiSecurityScheme{
+            //                Reference = new OpenApiReference{
+            //                    Id = "Bearer",
+            //                    Type = ReferenceType.SecurityScheme
+            //                }
+            //            },new List<string>()
+            //        }
+            //    });
+            //    var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+            //    var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+            //    if (File.Exists(xmlPath))
+            //    {
+            //        c.IncludeXmlComments(xmlPath);
+            //    }
+            //});
+
             services.AddControllersWithViews();
 
 
@@ -84,12 +132,18 @@ namespace StudentCourses
             {
                 configuration.RootPath = "ClientApp/build";
             });
-            //services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
+            services.AddMvc(options => options.EnableEndpointRouting = false);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            //app.UseSwagger();
+            //app.UseSwaggerUI(c =>
+            //{
+            //    c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+            //});
+
             app.UseCors(
                builder => builder.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin());
 
@@ -119,11 +173,11 @@ namespace StudentCourses
             app.UseHttpsRedirection();
 
 
-            app.UseEndpoints(endpoints =>
+            app.UseMvc(endpoints =>
             {
-                endpoints.MapControllerRoute(
+                endpoints.MapRoute(
                     name: "default",
-                    pattern: "{controller}/{action=Index}/{id?}");
+                    template: "{controller}/{action=Index}/{id?}");
             });
 
             app.UseSpa(spa =>
@@ -135,7 +189,7 @@ namespace StudentCourses
                     spa.UseReactDevelopmentServer(npmScript: "start");
                 }
             });
-            Seed.SeedData(app.ApplicationServices, env, this.Configuration).Wait();
+           //Seed.SeedData(app.ApplicationServices, env, this.Configuration).Wait();
         }
     }
 }

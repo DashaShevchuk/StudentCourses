@@ -1,9 +1,13 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Configuration;
 using StudentCourses.Data.EfContext;
 using StudentCourses.Data.Entities;
 using StudentCourses.Data.Entities.AppUeser;
 using System;
+using System.IO;
 using System.Linq;
+using System.Net.Mail;
+using System.Reflection;
 using System.Threading.Tasks;
 
 namespace StudentCourses.Data.SeedData
@@ -37,39 +41,8 @@ namespace StudentCourses.Data.SeedData
 
             }
         }
-        public static void SeedImages(EfDbContext context)
-        {
-            try
-            {
-                Image image1 = new Image
-                {
-                    Id = Guid.NewGuid().ToString(),
-                    Name = "image1",
-                    Path = "..."
-                };
-                Image image2 = new Image
-                {
-                    Id = Guid.NewGuid().ToString(),
-                    Name = "image2",
-                    Path = "..."
-                };
-                Image image3 = new Image
-                {
-                    Id = Guid.NewGuid().ToString(),
-                    Name = "image3",
-                    Path = "..."
-                };
-                context.Image.AddRangeAsync(image1, image2, image3);
-                context.SaveChanges();
-                
-            }
-            catch (Exception e)
-            {
 
-            }
-        }
-
-        public static async Task SeedUsers(UserManager<DbUser> userManager, EfDbContext context)
+        public static async Task SeedUsers(UserManager<DbUser> userManager)
         {
             try
             {
@@ -77,32 +50,31 @@ namespace StudentCourses.Data.SeedData
                 {
                     DbUser user1 = new DbUser
                     {
-                        UserName = "admin",
                         Name = "Peter",
-                        Surname = "Parker",
+                        LastName = "Parker",
+                        UserName = "Peter",
                         Email = "superadmin@gmail.com",
-                        PhoneNumber = "+380503334031",
-                        Image = context.Image.FirstOrDefault(t=> t.Name == "image1")
+                        PhoneNumber = "+380976213651",
+                        DateOfBirth = new DateTime(1995, 03, 25)
                     };
                     DbUser user2 = new DbUser
                     {
-                        UserName = "ivanbanan",
                         Name = "Ivan",
-                        Surname = "Anderson",
+                        LastName = "Anderson",
+                        UserName = "Ivan",
                         Email = "ivanbanan@gmail.com",
-                        PhoneNumber = "+380505551541",
-                        Image = context.Image.FirstOrDefault(t => t.Name == "image2")
+                        PhoneNumber = "+380964120472",
+                        DateOfBirth = new DateTime(1999, 12, 02)
                     };
                     DbUser user3 = new DbUser
                     {
-                        UserName = "oliamartunuk",
                         Name = "Olia",
-                        Surname = "Fleming",
+                        LastName = "Fleming",
+                        UserName = "Olia",
                         Email = "olia@gmail.com",
-                        PhoneNumber = "+380453855561",
-                        Image = context.Image.FirstOrDefault(t => t.Name == "image3")
+                        PhoneNumber = "+380971294621",
+                        DateOfBirth = new DateTime(2000, 07, 12)
                     };
-
                     await userManager.CreateAsync(user1, "Qwerty-1");
                     await userManager.AddToRoleAsync(user1, "Admin");
 
@@ -118,5 +90,6 @@ namespace StudentCourses.Data.SeedData
 
             }
         }
+
     }
 }

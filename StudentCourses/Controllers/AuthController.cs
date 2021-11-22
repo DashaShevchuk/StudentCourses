@@ -1,18 +1,20 @@
 ﻿using StudentCourses.Data.Entities.AppUeser;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using StudentCourses.Data.EfContext;
 using StudentCourses.Data.Models;
 using StudentCourses.Services;
-using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
+using System;
 
 namespace StudentCourses.Controllers
 {
-    public class AuthController : Controller
+    [ApiController]
+    [Produces("application/json")]
+    [Route("api/[controller]")]
+    public class AuthController : ControllerBase
     {
         private readonly UserManager<DbUser> _userManager;
         private readonly SignInManager<DbUser> _signInManager;
@@ -27,6 +29,7 @@ namespace StudentCourses.Controllers
             _jwtTokenService = jwtTokenService;
         }
         [HttpPost("login")]
+        [AllowAnonymous]
         public async Task<IActionResult> Login([FromBody] LoginModel model)
         {
             if (!ModelState.IsValid)
@@ -48,10 +51,6 @@ namespace StudentCourses.Controllers
             await _signInManager.SignInAsync(user, isPersistent: false);
 
             return Ok(new { token = _jwtTokenService.CreateToken(user) });
-        }
-        public IActionResult Index()
-        {
-            return View();
         }
     }
 }

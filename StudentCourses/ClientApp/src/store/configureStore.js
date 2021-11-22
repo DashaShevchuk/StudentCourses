@@ -4,13 +4,14 @@ import { connectRouter, routerMiddleware } from 'connected-react-router';
 import createHistory from 'history/createHashHistory';
 
 ///reducers
+import { loginReducer } from '../views/defaultViews/LoginPage/reducer';
 
 const baseUrl = document.getElementsByTagName('base')[0].getAttribute('href');
 export const history = createHistory({ basename: baseUrl });
 
 export default function configureStore(history, initialState) {
   const reducers = {
-    
+    login: loginReducer,
   };
 
   const middleware = [

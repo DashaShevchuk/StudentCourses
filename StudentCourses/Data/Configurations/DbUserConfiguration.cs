@@ -14,11 +14,6 @@ namespace StudentCourses.Data.Configurations
         {
             builder.HasMany(e => e.UserRoles)
                 .WithOne(e => e.User);
-
-            builder.HasOne(e => e.Image)
-                .WithOne(e => e.User)
-                .HasForeignKey<DbUser>(e => e.Id)
-                .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

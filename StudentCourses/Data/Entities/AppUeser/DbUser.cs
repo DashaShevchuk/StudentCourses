@@ -10,10 +10,9 @@ namespace StudentCourses.Data.Entities.AppUeser
     public class DbUser : IdentityUser
     {
         public string Name { get; set; }
-        public string Surname { get; set; }
         public string LastName { get; set; }
-
-        public Image Image { get; set; }
+        public string Image { get; set; }
+        public DateTime DateOfBirth { get; set; }
         public virtual ICollection<UserCourses> UserCourses { get; set; }
         public virtual ICollection<DbUserRole> UserRoles { get; set; }
     }

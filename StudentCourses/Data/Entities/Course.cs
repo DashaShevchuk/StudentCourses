@@ -15,8 +15,7 @@ namespace StudentCourses.Data.Entities
         public string ShortDescription { get; set; }
         public string LongDescription { get; set; }
         public int Duration { get; set; }
-        
-        public Image Image { get; set; }
+        public string Image { get; set; }
         public virtual ICollection<UserCourses> UserCourses { get; set; }
     }
 }

@@ -15,11 +15,6 @@ namespace StudentCourses.Data.Configurations
             builder.HasMany(e => e.UserCourses)
                 .WithOne(e => e.Course);
 
-            builder.HasOne(e => e.Image)
-                .WithOne(e => e.Course)
-                .HasForeignKey<Course>(e => e.Id)
-                .OnDelete(DeleteBehavior.Restrict);
-
             builder.Property(e => e.Name)
                 .HasMaxLength(64)
                 .IsRequired();

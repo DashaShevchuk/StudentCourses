@@ -20,8 +20,7 @@ namespace StudentCourses.Data.SeedData
                 var managerRole = scope.ServiceProvider.GetRequiredService<RoleManager<DbRole>>();
                 var context = scope.ServiceProvider.GetRequiredService<EfDbContext>();
                 PreConfigured.SeedRoles(managerRole);
-                PreConfigured.SeedImages(context);
-                await PreConfigured.SeedUsers(manager, context);
+                await PreConfigured.SeedUsers(manager);
             }
         }
     }
