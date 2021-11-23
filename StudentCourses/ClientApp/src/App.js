@@ -7,6 +7,7 @@ import 'primeicons/primeicons.css';
 
 // Pages
 const LoginPage = React.lazy(() => import("./views/defaultViews/LoginPage/LoginPage"));
+const RegistrationPage = React.lazy(() => import("./views/defaultViews/RegisterPage/RegisterPage"))
 
 // Layouts
 const AdminLayout = React.lazy(() => import("./layouts/adminLayout/AdminLayout"));
@@ -29,6 +30,7 @@ class App extends Component {
           <Route exact path="/" name="Login" render={ props => <LoginPage { ...props } /> } />
           <Route path="/admin" name="Admin" render={ props => <AdminLayout { ...props } /> } />
           <Route path="/user" name="User" render={ props => <UserLayout { ...props } /> } />
+          <Route path="/register" name="Registartion" render={ props => <RegistrationPage {...props}/>}/>
         </Switch>
       </Suspense>
       </Router> 

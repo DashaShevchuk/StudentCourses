@@ -22,6 +22,7 @@ using Microsoft.Extensions.FileProviders;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
+using Newtonsoft.Json.Serialization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace StudentCourses
@@ -132,7 +133,10 @@ namespace StudentCourses
             {
                 configuration.RootPath = "ClientApp/build";
             });
-            services.AddMvc(options => options.EnableEndpointRouting = false);
+            services.AddMvc(options => options.EnableEndpointRouting = false).AddNewtonsoftJson(options =>
+            {
+                options.SerializerSettings.ContractResolver = new DefaultContractResolver();
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
