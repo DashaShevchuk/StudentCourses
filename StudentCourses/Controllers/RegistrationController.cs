@@ -27,26 +27,33 @@ namespace StudentCourses.Controllers
             {
                 return BadRequest("Input all data");
             }
-            DbUser user = new DbUser
+            if (model.Password == model.PasswordConfirm)
             {
-                Name = model.Name,
-                LastName = model.LastName,
-                UserName = model.Name,
-                Email = model.Email,
-                PhoneNumber = model.PhoneNumber,
-                DateOfBirth = model.DateOfBirth
-            };
-            var res = await _userManager.CreateAsync(user, model.Password);
-            if (!res.Succeeded)
-            {
-                return BadRequest("Error with adding user");
+                DbUser user = new DbUser
+                {
+                    Name = model.Name,
+                    LastName = model.LastName,
+                    UserName = model.Name,
+                    Email = model.Email,
+                    PhoneNumber = model.PhoneNumber,
+                    DateOfBirth = model.DateOfBirth
+                };
+                var res = await _userManager.CreateAsync(user, model.Password);
+                if (!res.Succeeded)
+                {
+                    return BadRequest("Error with adding user");
+                }
+                res = await _userManager.AddToRoleAsync(user, "User");
+                if (!res.Succeeded)
+                {
+                    return BadRequest("Error with addig role to user");
+                }
+                return Ok("User added successfully");
             }
-            res = await _userManager.AddToRoleAsync(user, "User");
-            if (!res.Succeeded)
+            else
             {
-                return BadRequest("Error with addig role to user");
+                return BadRequest("Passwords do not match");
             }
-            return Ok("User added successfully");
         }
     }
 }

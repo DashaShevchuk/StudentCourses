@@ -1,25 +1,18 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
-import {
-  Button, Card, CardBody, CardFooter, CardGroup,
-  Col, Container, Form, Input, InputGroup,
-  InputGroupAddon, InputGroupText, Row
-} from 'reactstrap';
-import classnames from 'classnames';
-import PropTypes from 'prop-types';
 import { connect } from "react-redux";
-import { Register } from './reducer';
 import { Redirect } from 'react-router-dom'
 import * as registerListActions from './reducer';
+import InputMask from 'react-input-mask';
+import { TextField } from '@material-ui/core';
 import Background from "../../../assets/images/back.jpg";
 import {
   MDBContainer,
   MDBRow,
   MDBCol,
   MDBInput,
-  MDBBtn
+  MDBBtn,
+  Input
 } from "mdbreact";
-
 
 import get from "lodash.get";
 
@@ -28,6 +21,7 @@ class RegisterPage extends Component {
   state = {
     email: '',
     password: '',
+    passwordconfirm: '',
     name: '',
     lastname: '',
     phonenumber: '',
@@ -57,19 +51,23 @@ class RegisterPage extends Component {
 
   onSubmitForm = (e) => {
     e.preventDefault();
-    const { email, password, name, lastname, phonenumber, dateofbirth } = this.state;
+    const { email, password, passwordconfirm, name, lastname, phonenumber, dateofbirth } = this.state;
+    const regex_phone = /\(\+38\)\d{3} \d{3} \d{2} \d{2}/;
+    const regex_dateofbirth = /^\d{4}.(0[1-9]|1[0-2]).(0[1-9]|[12][0-9]|3[01])$/;
 
     let errorsState = {};
 
-    if (password.length < 8) errorsState.password = " Поле має складатись з 8 символів, містити мінімум одну велику літеру! ";
-
-    if (name.length < 3) errorsState.name = " Введіть корректне ім'я! ";
-
-    if (lastname.length < 3) errorsState.lastname = " Введіть корректне прізвище! ";
-
+    if (password === '') errorsState.password = " Input password! ";
+    if (passwordconfirm === '') errorsState.passwordconfirm = " Input confirm password! "
+    if (password != passwordconfirm) errorsState.passwordconfirm = " Passwords do not match! ";
+    if (name === '') errorsState.name = " Input name! ";
+    if (lastname === '') errorsState.lastname = " Input last name! ";
     if (phonenumber === ' ') errorsState.phonenumber = " Input phone number! ";
-
     if (dateofbirth === ' ') errorsState.dateofbirth = " Input date of birth! ";
+    if (phonenumber === '') errorsState.phonenumber = " Input phone number! ";
+    if (!regex_phone.test(phonenumber)) errorsState.phonenumber = " Please input correct phone number! ";
+    if (dateofbirth === '') errorsState.dateofbirth = " Input date of birth! ";
+    if (!regex_dateofbirth.test(dateofbirth)) errorsState.dateofbirth = " Please input correct date of birth! ";
 
     const isValid = Object.keys(errorsState).length === 0
     if (isValid) {
@@ -77,6 +75,7 @@ class RegisterPage extends Component {
       const model = {
         email: email,
         password: password,
+        passwordconfirm: passwordconfirm,
         name: name,
         lastname: lastname,
         phonenumber: phonenumber,
@@ -165,10 +164,10 @@ class RegisterPage extends Component {
                   />
                   {!!errorsState.phonenumber ? <div style={{ color: "red" }}>{errorsState.phonenumber}</div> : ""}
                   <MDBInput
-                    label="Phone number"
+                    label="Phone number ((+38)999 999 99 99)"
                     icon="phone"
                     type="text"
-                    placeholder="Phone number"
+                    placeholder="(+38)999 999 99 99"
                     id="phonenumber"
                     autoComplete="phonenumber"
                     name="phonenumber"
@@ -177,10 +176,10 @@ class RegisterPage extends Component {
                   />
                   {!!errorsState.dateofbirth ? <div style={{ color: "red" }}>{errorsState.dateofbirth}</div> : ""}
                   <MDBInput
-                    label="Date of birth"
+                    label="Date of birth (YYYY.MM.DD)"
                     icon="calendar"
                     type="text"
-                    placeholder="Date of birth"
+                    placeholder="YYYY-MM-DD"
                     id="dateofbirth"
                     autoComplete="dateofbirth"
                     name="dateofbirth"
@@ -196,6 +195,19 @@ class RegisterPage extends Component {
                     name="password"
                     placeholder="Password"
                     autoComplete="password"
+                    onIconMouseEnter={this.mouseEnter}
+                    onIconMouseLeave={this.mouseLeave}
+                    onChange={this.handleChange}
+                  />
+                  {!!errorsState.passwordconfirm ? <div style={{ color: "red" }}>{errorsState.passwordconfirm}</div> : ""}
+                  <MDBInput
+                    label="Confirm password"
+                    icon={iconInput}
+                    type={typeInput}
+                    id="passwordconfirm"
+                    name="passwordconfirm"
+                    placeholder="passwordconfirm"
+                    autoComplete="passwordconfirm"
                     onIconMouseEnter={this.mouseEnter}
                     onIconMouseLeave={this.mouseLeave}
                     onChange={this.handleChange}
