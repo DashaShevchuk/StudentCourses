@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using StudentCourses.Data.Entities.AppUeser;
+using StudentCourses.Data.Interfaces;
 using StudentCourses.Data.Models;
 using System;
 using System.Collections.Generic;
@@ -14,10 +15,10 @@ namespace StudentCourses.Controllers
     [Route("api/[controller]")]
     public class RegistrationController : ControllerBase
     {
-        private readonly UserManager<DbUser> _userManager;
-        public RegistrationController(UserManager<DbUser> userManager)
+        private readonly IUser users;
+        public RegistrationController(UserManager<DbUser> userManager, IUser Users)
         {
-            _userManager = userManager;
+            users = Users;
         }
         [HttpPost("register")]
         [AllowAnonymous]
@@ -25,30 +26,20 @@ namespace StudentCourses.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest("Input all data");
+                return BadRequest("Invalid data");
             }
             if (model.Password == model.PasswordConfirm)
             {
-                DbUser user = new DbUser
+                bool registrationResult = await users.RegistrUserAsync(model);
+
+                if (registrationResult == true)
                 {
-                    Name = model.Name,
-                    LastName = model.LastName,
-                    UserName = model.Name,
-                    Email = model.Email,
-                    PhoneNumber = model.PhoneNumber,
-                    DateOfBirth = model.DateOfBirth
-                };
-                var res = await _userManager.CreateAsync(user, model.Password);
-                if (!res.Succeeded)
-                {
-                    return BadRequest("Error with adding user");
+                    return Ok();
                 }
-                res = await _userManager.AddToRoleAsync(user, "User");
-                if (!res.Succeeded)
+                else
                 {
-                    return BadRequest("Error with addig role to user");
+                    return BadRequest("User dont added");
                 }
-                return Ok("User added successfully");
             }
             else
             {

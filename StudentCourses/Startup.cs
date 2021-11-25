@@ -24,6 +24,8 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json.Serialization;
 using Microsoft.AspNetCore.Mvc;
+using StudentCourses.Data.Interfaces;
+using StudentCourses.Data.Repositories;
 
 namespace StudentCourses
 {
@@ -82,6 +84,8 @@ namespace StudentCourses
                     ClockSkew = TimeSpan.Zero
                 };
             });
+
+            services.AddTransient<IUser, UserRepository>();
 
             //services.AddSwaggerGen(c =>
             //{

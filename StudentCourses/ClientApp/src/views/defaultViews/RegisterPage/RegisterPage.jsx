@@ -6,6 +6,12 @@ import InputMask from 'react-input-mask';
 import { TextField } from '@material-ui/core';
 import Background from "../../../assets/images/back.jpg";
 import {
+  MuiPickersUtilsProvider,
+  KeyboardDatePicker,
+} from '@material-ui/pickers';
+import DateFnsUtils from "@date-io/date-fns";
+import deLocale from "date-fns/locale/en-AU";
+import {
   MDBContainer,
   MDBRow,
   MDBCol,
@@ -25,7 +31,7 @@ class RegisterPage extends Component {
     name: '',
     lastname: '',
     phonenumber: '',
-    dateofbirth: '',
+    dateofbirth: null,
     errorsState: {},
     errorServer: {},
     done: false,
@@ -53,21 +59,27 @@ class RegisterPage extends Component {
     e.preventDefault();
     const { email, password, passwordconfirm, name, lastname, phonenumber, dateofbirth } = this.state;
     const regex_phone = /\(\+38\)\d{3} \d{3} \d{2} \d{2}/;
-    const regex_dateofbirth = /^\d{4}.(0[1-9]|1[0-2]).(0[1-9]|[12][0-9]|3[01])$/;
-
+    const regex_email = /^\S+@\S+\.\S+$/;
+    function pad(s) { return (s < 10) ? '0' + s : s; };
+    let today = new Date();
+    const nowDate = [pad(today.getDate()), pad(today.getMonth() + 1), today.getFullYear()].join('.');;
+    let birthDate;
     let errorsState = {};
-
-    if (password === '') errorsState.password = " Input password! ";
+    if (!dateofbirth) errorsState.dateofbirth = "Field is empty";
+    else {
+      birthDate = [pad(dateofbirth.getDate()), pad(dateofbirth.getMonth() + 1), dateofbirth.getFullYear()].join('.');
+      if (birthDate >= nowDate) errorsState.dateofbirth = "Field not in correct format";
+    }
+    if (dateofbirth === ' ') errorsState.dateofbirth = " Input date of birth! ";
     if (passwordconfirm === '') errorsState.passwordconfirm = " Input confirm password! "
     if (password != passwordconfirm) errorsState.passwordconfirm = " Passwords do not match! ";
     if (name === '') errorsState.name = " Input name! ";
     if (lastname === '') errorsState.lastname = " Input last name! ";
     if (phonenumber === ' ') errorsState.phonenumber = " Input phone number! ";
-    if (dateofbirth === ' ') errorsState.dateofbirth = " Input date of birth! ";
     if (phonenumber === '') errorsState.phonenumber = " Input phone number! ";
     if (!regex_phone.test(phonenumber)) errorsState.phonenumber = " Please input correct phone number! ";
-    if (dateofbirth === '') errorsState.dateofbirth = " Input date of birth! ";
-    if (!regex_dateofbirth.test(dateofbirth)) errorsState.dateofbirth = " Please input correct date of birth! ";
+    if (email === '') errorsState.email = " Input email! ";
+    if (!regex_email.test(email)) errorsState.email = " Please input correct email! ";
 
     const isValid = Object.keys(errorsState).length === 0
     if (isValid) {
@@ -118,6 +130,22 @@ class RegisterPage extends Component {
     this.setStateByErrors(e.target.name, e.target.value);
   }
 
+  handleDateChange = (date) => {
+    if (!!this.state.errorsState['dateofbirth']) {
+      let errorsState = Object.assign({}, this.state.errorsState);
+      delete errorsState['dateofbirth'];
+      this.setState(
+        {
+          dateofbirth: date,
+          errorsState
+        }
+      )
+    }
+    else {
+      this.setState({ dateofbirth: date });
+    }
+  };
+
   render() {
     const { errorsState, iconInput, typeInput, errorServer } = this.state;
     const form = (
@@ -129,41 +157,49 @@ class RegisterPage extends Component {
                 <p className="h5 text-center mb-4">Registration!</p>
                 <div className="grey-text">
                   {!!errorsState.name ? <div style={{ color: "red" }}>{errorsState.name}</div> : ""}
-                  <MDBInput label="Name"
-                    icon="user"
-                    type="text"
-                    placeholder="Name"
+                  <TextField
+                    fullWidth
+                    label="Name"
                     id="name"
-                    autoComplete="name"
                     name="name"
-                    value={this.state.name}
+                    placeholder="Name"
+                    autoComplete="name"
+                    //value={this.state.name}
                     onChange={this.handleChange}
                   />
                   {!!errorsState.lastname ? <div style={{ color: "red" }}>{errorsState.lastname}</div> : ""}
-                  <MDBInput l
+                  <TextField
+                    fullWidth
                     label="Last name"
-                    icon="user"
-                    type="text"
-                    placeholder="Last name"
                     id="lastname"
-                    autoComplete="lastname"
                     name="lastname"
-                    value={this.state.lastname}
+                    placeholder="last name"
+                    autoComplete="Last name"
+                    //value={this.state.lastname}
                     onChange={this.handleChange}
                   />
-                  <MDBInput
+                  {/* <TextField
+                    fullWidth
                     label="Email"
-                    icon="envelope"
                     type="email"
                     placeholder="Електронна пошта"
                     id="email"
                     autoComplete="email"
                     name="email"
-                    value={this.state.email}
+                    //value={this.state.email}
                     onChange={this.handleChange}
-                  />
-                  {!!errorsState.phonenumber ? <div style={{ color: "red" }}>{errorsState.phonenumber}</div> : ""}
-                  <MDBInput
+                  /> */}
+                 <TextField 
+                 className="adjusting-margin" 
+                 placeholder="email@example.com" 
+                 type="email" 
+                 name="email" 
+                 label="Email" 
+                 onChange={this.handleChange} 
+                 fullWidth 
+                 />
+                  {!!errorsState.email ? <div style={{ color: "red" }}>{errorsState.email}</div> : ""}
+                  {/* <MDBInput
                     label="Phone number ((+38)999 999 99 99)"
                     icon="phone"
                     type="text"
@@ -173,9 +209,23 @@ class RegisterPage extends Component {
                     name="phonenumber"
                     value={this.state.phonenumber}
                     onChange={this.handleChange}
-                  />
+                  /> */}
+                  <InputMask
+                    mask="(+38)999 999 99 99"
+                    maskChar=" "
+                    onChange={this.handleChange}
+                  >
+                    {() =>
+                      <TextField
+                        fullWidth
+                        label="Outlined"
+                        label="Phone number"
+                        name="phonenumber"
+                      />
+                    }
+                  </InputMask>
                   {!!errorsState.dateofbirth ? <div style={{ color: "red" }}>{errorsState.dateofbirth}</div> : ""}
-                  <MDBInput
+                  {/* <MDBInput
                     label="Date of birth (YYYY.MM.DD)"
                     icon="calendar"
                     type="text"
@@ -185,11 +235,24 @@ class RegisterPage extends Component {
                     name="dateofbirth"
                     value={this.state.dateofbirth}
                     onChange={this.handleChange}
-                  />
+                  /> */}
+                  <MuiPickersUtilsProvider utils={DateFnsUtils} locale={deLocale}>
+                    <KeyboardDatePicker
+                      fullWidth
+                      margin="normal"
+                      label="Date of birth"
+                      format="dd/MM/yyyy"
+                      value={this.state.dateofbirth}
+                      onChange={this.handleDateChange}
+                      KeyboardButtonProps={{
+                        'aria-label': 'change date',
+                      }}
+                    />
+                  </MuiPickersUtilsProvider>
                   {!!errorsState.password ? <div style={{ color: "red" }}>{errorsState.password}</div> : ""}
-                  <MDBInput
+                  <TextField
+                    fullWidth
                     label="Password"
-                    icon={iconInput}
                     type={typeInput}
                     id="password"
                     name="password"
@@ -200,13 +263,13 @@ class RegisterPage extends Component {
                     onChange={this.handleChange}
                   />
                   {!!errorsState.passwordconfirm ? <div style={{ color: "red" }}>{errorsState.passwordconfirm}</div> : ""}
-                  <MDBInput
-                    label="Confirm password"
-                    icon={iconInput}
+                  <TextField
+                    fullWidth
                     type={typeInput}
+                    label="Confirm password"
                     id="passwordconfirm"
                     name="passwordconfirm"
-                    placeholder="passwordconfirm"
+                    placeholder="Confirm password"
                     autoComplete="passwordconfirm"
                     onIconMouseEnter={this.mouseEnter}
                     onIconMouseLeave={this.mouseLeave}
