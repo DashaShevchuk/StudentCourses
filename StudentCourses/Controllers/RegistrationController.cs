@@ -1,12 +1,16 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.WebUtilities;
+using StudentCourses.Data.EfContext;
 using StudentCourses.Data.Entities.AppUeser;
-using StudentCourses.Data.Interfaces;
+using StudentCourses.Data.Interfaces.UserInterfaces;
 using StudentCourses.Data.Models;
-using System;
+using StudentCourses.Services.EmailSender;
+using StudentCourses.Services.ViewHellper;
 using System.Collections.Generic;
-using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 
 namespace StudentCourses.Controllers
@@ -15,36 +19,33 @@ namespace StudentCourses.Controllers
     [Route("api/[controller]")]
     public class RegistrationController : ControllerBase
     {
-        private readonly IUser users;
-        public RegistrationController(UserManager<DbUser> userManager, IUser Users)
+        private readonly IUserService userService;
+        public RegistrationController(IUserService UserService)
         {
-            users = Users;
+            userService = UserService;
         }
+
         [HttpPost("register")]
         [AllowAnonymous]
         public async Task<IActionResult> Registration([FromBody] RegistrationModel model)
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest("Invalid data");
+                return BadRequest();
             }
-            if (model.Password == model.PasswordConfirm)
-            {
-                bool registrationResult = await users.RegistrUserAsync(model);
 
-                if (registrationResult == true)
-                {
-                    return Ok();
-                }
-                else
-                {
-                    return BadRequest("User dont added");
-                }
-            }
-            else
-            {
-                return BadRequest("Passwords do not match");
-            }
+            HttpStatusCode registrationResult = await userService.RegistrUser(model);
+            //тут надсилати емейл, створити метод який приймає той токен з ссилкі і конфіримить емейл користувача 
+
+            return StatusCode((int)registrationResult);
+        }
+
+        [HttpGet("{token}")]
+        public async Task<IActionResult> ConfirmEmail(string token)
+        {
+            HttpStatusCode confirmationEmailResult = await userService.ConfirmationEmail(token);
+
+            return StatusCode((int)confirmationEmailResult);
         }
     }
 }

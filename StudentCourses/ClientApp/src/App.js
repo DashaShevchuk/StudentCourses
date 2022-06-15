@@ -4,10 +4,12 @@ import './App.scss';
 import 'primereact/resources/themes/nova-light/theme.css';
 import 'primereact/resources/primereact.min.css';
 import 'primeicons/primeicons.css';
+import 'antd/dist/antd.css';
 
 // Pages
 const LoginPage = React.lazy(() => import("./views/defaultViews/LoginPage/LoginPage"));
-const RegistrationPage = React.lazy(() => import("./views/defaultViews/RegisterPage/RegisterPage"))
+const RegistrationPage = React.lazy(() => import("./views/defaultViews/RegisterPage/RegisterPage"));
+const EmailConfirmation = React.lazy(() => import("./views/defaultViews/EmailConfirmation/EmailConfirmation"));
 
 // Layouts
 const AdminLayout = React.lazy(() => import("./layouts/adminLayout/AdminLayout"));
@@ -30,7 +32,8 @@ class App extends Component {
           <Route exact path="/" name="Login" render={ props => <LoginPage { ...props } /> } />
           <Route path="/admin" name="Admin" render={ props => <AdminLayout { ...props } /> } />
           <Route path="/user" name="User" render={ props => <UserLayout { ...props } /> } />
-          <Route path="/register" name="Registartion" render={ props => <RegistrationPage {...props}/>}/>
+          <Route path="/register" name="Registartion" render={ props => <RegistrationPage {...props}/> } />
+          <Route path="/:token" name="EmailConfirmation" render={ props => <EmailConfirmation {...props} /> } />
         </Switch>
       </Suspense>
       </Router> 

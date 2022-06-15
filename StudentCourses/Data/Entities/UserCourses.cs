@@ -10,12 +10,16 @@ namespace StudentCourses.Data.Entities
 {
     public class UserCourses
     {
+        public int Id { get; set; }
+
         public string UserId { get; set; }
         public  virtual DbUser User { get; set; }
 
-        public string CourseId { get; set; }
+        public int CourseId { get; set; }
         public Course Course { get; set; }
 
         public DateTime DateJoin { get; set; }
+
+        public virtual ICollection<HangfireJobs> HangfireJobs { get; set; }
     }
 }

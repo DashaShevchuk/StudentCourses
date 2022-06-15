@@ -1,0 +1,12 @@
+.img{
+    height: 100px;
+    width: 150px;
+}
+.container{
+    display: flex;
+    justify-content: space-around;
+}
+.dialogImg{
+    height: 150px;
+    width: 200px;
+}

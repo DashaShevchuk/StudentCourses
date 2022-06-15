@@ -15,9 +15,7 @@ import {
   MDBContainer,
   MDBRow,
   MDBCol,
-  MDBInput,
-  MDBBtn,
-  Input
+  MDBBtn
 } from "mdbreact";
 
 import get from "lodash.get";
@@ -41,41 +39,18 @@ class RegisterPage extends Component {
     typeInput: 'password'
   }
 
-  mouseEnter = () => {
-    this.setState({
-      iconInput: 'eye',
-      typeInput: 'text'
-    });
-  };
-
-  mouseLeave = () => {
-    this.setState({
-      iconInput: 'eye-slash',
-      typeInput: 'password'
-    });
-  };
-
   onSubmitForm = (e) => {
     e.preventDefault();
     const { email, password, passwordconfirm, name, lastname, phonenumber, dateofbirth } = this.state;
     const regex_phone = /\(\+38\)\d{3} \d{3} \d{2} \d{2}/;
     const regex_email = /^\S+@\S+\.\S+$/;
-    function pad(s) { return (s < 10) ? '0' + s : s; };
-    let today = new Date();
-    const nowDate = [pad(today.getDate()), pad(today.getMonth() + 1), today.getFullYear()].join('.');;
-    let birthDate;
     let errorsState = {};
     if (!dateofbirth) errorsState.dateofbirth = "Field is empty";
-    else {
-      birthDate = [pad(dateofbirth.getDate()), pad(dateofbirth.getMonth() + 1), dateofbirth.getFullYear()].join('.');
-      if (birthDate >= nowDate) errorsState.dateofbirth = "Field not in correct format";
-    }
     if (dateofbirth === ' ') errorsState.dateofbirth = " Input date of birth! ";
     if (passwordconfirm === '') errorsState.passwordconfirm = " Input confirm password! "
     if (password != passwordconfirm) errorsState.passwordconfirm = " Passwords do not match! ";
     if (name === '') errorsState.name = " Input name! ";
     if (lastname === '') errorsState.lastname = " Input last name! ";
-    if (phonenumber === ' ') errorsState.phonenumber = " Input phone number! ";
     if (phonenumber === '') errorsState.phonenumber = " Input phone number! ";
     if (!regex_phone.test(phonenumber)) errorsState.phonenumber = " Please input correct phone number! ";
     if (email === '') errorsState.email = " Input email! ";
@@ -130,7 +105,7 @@ class RegisterPage extends Component {
     this.setStateByErrors(e.target.name, e.target.value);
   }
 
-  handleDateChange = (date) => {
+ handleDateChange = (date) => {
     if (!!this.state.errorsState['dateofbirth']) {
       let errorsState = Object.assign({}, this.state.errorsState);
       delete errorsState['dateofbirth'];
@@ -145,9 +120,9 @@ class RegisterPage extends Component {
       this.setState({ dateofbirth: date });
     }
   };
-
+ 
   render() {
-    const { errorsState, iconInput, typeInput, errorServer } = this.state;
+    const { errorsState, typeInput, errorServer } = this.state;
     const form = (
       <div className="main-div background-image" style={{ backgroundImage: "url(" + Background + ")" }}>
         <MDBContainer>
@@ -164,7 +139,6 @@ class RegisterPage extends Component {
                     name="name"
                     placeholder="Name"
                     autoComplete="name"
-                    //value={this.state.name}
                     onChange={this.handleChange}
                   />
                   {!!errorsState.lastname ? <div style={{ color: "red" }}>{errorsState.lastname}</div> : ""}
@@ -175,20 +149,9 @@ class RegisterPage extends Component {
                     name="lastname"
                     placeholder="last name"
                     autoComplete="Last name"
-                    //value={this.state.lastname}
                     onChange={this.handleChange}
                   />
-                  {/* <TextField
-                    fullWidth
-                    label="Email"
-                    type="email"
-                    placeholder="Електронна пошта"
-                    id="email"
-                    autoComplete="email"
-                    name="email"
-                    //value={this.state.email}
-                    onChange={this.handleChange}
-                  /> */}
+                 {!!errorsState.email ? <div style={{ color: "red" }}>{errorsState.email}</div> : ""}
                  <TextField 
                  className="adjusting-margin" 
                  placeholder="email@example.com" 
@@ -198,18 +161,7 @@ class RegisterPage extends Component {
                  onChange={this.handleChange} 
                  fullWidth 
                  />
-                  {!!errorsState.email ? <div style={{ color: "red" }}>{errorsState.email}</div> : ""}
-                  {/* <MDBInput
-                    label="Phone number ((+38)999 999 99 99)"
-                    icon="phone"
-                    type="text"
-                    placeholder="(+38)999 999 99 99"
-                    id="phonenumber"
-                    autoComplete="phonenumber"
-                    name="phonenumber"
-                    value={this.state.phonenumber}
-                    onChange={this.handleChange}
-                  /> */}
+                 {!!errorsState.phonenumber ? <div style={{ color: "red" }}>{errorsState.phonenumber}</div> : ""}
                   <InputMask
                     mask="(+38)999 999 99 99"
                     maskChar=" "
@@ -225,17 +177,6 @@ class RegisterPage extends Component {
                     }
                   </InputMask>
                   {!!errorsState.dateofbirth ? <div style={{ color: "red" }}>{errorsState.dateofbirth}</div> : ""}
-                  {/* <MDBInput
-                    label="Date of birth (YYYY.MM.DD)"
-                    icon="calendar"
-                    type="text"
-                    placeholder="YYYY-MM-DD"
-                    id="dateofbirth"
-                    autoComplete="dateofbirth"
-                    name="dateofbirth"
-                    value={this.state.dateofbirth}
-                    onChange={this.handleChange}
-                  /> */}
                   <MuiPickersUtilsProvider utils={DateFnsUtils} locale={deLocale}>
                     <KeyboardDatePicker
                       fullWidth
@@ -258,8 +199,6 @@ class RegisterPage extends Component {
                     name="password"
                     placeholder="Password"
                     autoComplete="password"
-                    onIconMouseEnter={this.mouseEnter}
-                    onIconMouseLeave={this.mouseLeave}
                     onChange={this.handleChange}
                   />
                   {!!errorsState.passwordconfirm ? <div style={{ color: "red" }}>{errorsState.passwordconfirm}</div> : ""}
@@ -271,8 +210,6 @@ class RegisterPage extends Component {
                     name="passwordconfirm"
                     placeholder="Confirm password"
                     autoComplete="passwordconfirm"
-                    onIconMouseEnter={this.mouseEnter}
-                    onIconMouseLeave={this.mouseLeave}
                     onChange={this.handleChange}
                   />
                 </div>
@@ -286,10 +223,10 @@ class RegisterPage extends Component {
             </MDBCol>
           </MDBRow>
         </MDBContainer>
-      </div>
+      </div>//<Redirect to='/emailconfirmation'  />
     );
     return (
-      this.props.success ? <Redirect to='/login' /> : form
+      this.props.success ?   <Redirect to='/'/>: form  
     );
   }
 }

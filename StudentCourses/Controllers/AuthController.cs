@@ -48,6 +48,11 @@ namespace StudentCourses.Controllers
                 return BadRequest("Wrong password");
             }
 
+            if (!await _userManager.IsEmailConfirmedAsync(user))
+            {
+                return Unauthorized();
+            }
+
             await _signInManager.SignInAsync(user, isPersistent: false);
 
             return Ok(new { token = _jwtTokenService.CreateToken(user) });

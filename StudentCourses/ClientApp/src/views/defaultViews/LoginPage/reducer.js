@@ -75,8 +75,7 @@ export const login = model => {
         response => {
           dispatch(loginActions.success());
           loginByJWT(response.data, dispatch);
-          const pushUrl = getUrlToRedirect();   
-          console.log("QQQQQQQQQQQQQQQQQQ",pushUrl);     
+          const pushUrl = getUrlToRedirect();      
           dispatch(push(pushUrl));
         },
         err => {
@@ -92,25 +91,23 @@ export const login = model => {
 
 function getUrlToRedirect() {
   var user = jwt.decode(localStorage.jwtToken);
-  //let roles =[];
   let roles = user.roles;
-  console.log("QQQQQQQQQQQQQQQQQQ",user);
   let path = "";
   if (Array.isArray(roles)) {
     for (let i = 0; i < roles.length; i++) {
       if (roles[i] == "User") {
-        path = "/user";
+        path = "/user/allcourses";
         break;
       } else if (roles[i] === "Admin") {
-        path = "/admin";
+        path = "/admin/users";
         break;
       }
     }
   } else {
     if (roles == "User") {
-      path = "/user";
+      path = "/user/allcourses";
     } else if (roles === "Admin") {
-      path = "/admin";
+      path = "/admin/users";
     }
   }
 
@@ -138,7 +135,6 @@ export const loginActions = {
   },
 
   setCurrentUser: user => {
-    ////console.log('LOGIN_SET_CURRENT_USER: ', user);
     return {
       type: LOGIN_SET_CURRENT_USER,
       user
@@ -154,9 +150,10 @@ export function logout() {
 
 export const loginByJWT = (tokens, dispatch) => {
   const { token, refToken } = tokens;
-  ////console.log('Hello app Token: ', token);
+  console.log('login tokens: ', token);
+  console.log('login refToken: ', refToken);
   var user = jwt.decode(token);
-  ////console.log('Hello app User: ', user);
+
   if (!Array.isArray(user.roles)) {
     user.roles = Array.of(user.roles);
   }
@@ -167,8 +164,13 @@ export const loginByJWT = (tokens, dispatch) => {
 };
 
 export const logoutByJWT = dispatch => {
+  console.log('logout jwtToken: ', localStorage.getItem("jwtToken"));
+  console.log('logout refreshToken: ', localStorage.getItem("refreshToken"));
+
   localStorage.removeItem("jwtToken");
   localStorage.removeItem("refreshToken");
+
+
   setAuthorizationToken(false);
   dispatch(loginActions.setCurrentUser({}));
 };

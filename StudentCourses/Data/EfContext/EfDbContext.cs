@@ -19,6 +19,7 @@ namespace StudentCourses.Data.EfContext
 
         public virtual DbSet<Course> Course { get; set; }
         public virtual DbSet<UserCourses> UserCourse { get; set; }
+        public virtual DbSet<HangfireJobs> HangfireJobs { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -29,6 +30,7 @@ namespace StudentCourses.Data.EfContext
             modelBuilder.ApplyConfiguration(new DbUserConfiguration());
             modelBuilder.ApplyConfiguration(new DbRoleConfiguration());
             modelBuilder.ApplyConfiguration(new UserCoursesConfiguration());
+            modelBuilder.ApplyConfiguration(new HangfireJobsConfiguration());
         }
     }
 }

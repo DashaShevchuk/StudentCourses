@@ -1,0 +1,111 @@
+﻿@model StudentCourses.Data.Models.EmailCourseModel
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <style>
+        body {
+            background-color: #f6f6f6;
+            font-family: sans-serif;
+            -webkit-font-smoothing: antialiased;
+            font-size: 14px;
+            line-height: 1.4;
+            margin: 0;
+            padding: 0;
+            -ms-text-size-adjust: 100%;
+            -webkit-text-size-adjust: 100%;
+        }
+
+        table {
+            border-collapse: separate;
+            mso-table-lspace: 0pt;
+            mso-table-rspace: 0pt;
+            width: 100%;
+        }
+
+            table td {
+                font-family: sans-serif;
+                font-size: 14px;
+                vertical-align: top;
+            }
+
+        .body {
+            background-color: #f6f6f6;
+            width: 100%;
+        }
+
+        .container {
+            display: block;
+            Margin: 0 auto !important;
+            max-width: 580px;
+            padding: 10px;
+            width: 580px;
+        }
+
+        .content {
+            box-sizing: border-box;
+            display: block;
+            Margin: 0 auto;
+            max-width: 580px;
+            padding: 10px;
+        }
+
+        .main {
+            background: #fff;
+            border-radius: 3px;
+            width: 100%;
+        }
+
+        .wrapper {
+            box-sizing: border-box;
+            padding: 20px;
+        }
+
+        h1,
+        h2,
+        h3,
+        h4 {
+            color: #000000;
+            font-family: sans-serif;
+            font-weight: 400;
+            line-height: 1.4;
+            margin: 0;
+            Margin-bottom: 30px;
+        }
+
+        h1 {
+            font-size: 35px;
+            font-weight: 300;
+            text-align: center;
+            text-transform: capitalize;
+        }
+    </style>
+</head>
+<body>
+    <table border="0" cellpadding="0" cellspacing="0" class="body">
+        <tr>
+            <td class="container">
+                <div class="content">
+                    <table class="main">
+                        <tr>
+                            <td class="wrapper">
+                                <table border="0" cellpadding="0" cellspacing="0">
+                                    <tr>
+                                        <td>
+                                            <h1>Dear @Model.UserName</h1>
+                                            <h2>The course <b>@Model.CourseName</b> is start @Model.NotifyType, at @Model.DateStart</h2>
+                                            <p>Please do not forget this, good luck in your studies ❤</p>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </td>
+        </tr>
+    </table>
+</body>
+</html>

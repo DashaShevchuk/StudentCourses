@@ -12,7 +12,7 @@ namespace StudentCourses.Data.Configurations
     {
         public void Configure(EntityTypeBuilder<UserCourses> builder)
         {
-            builder.HasKey(x => new { x.CourseId, x.UserId });
+           // builder.HasKey(x => new { x.CourseId, x.UserId });
 
             builder.HasOne(e => e.User)
                 .WithMany(e => e.UserCourses)
@@ -22,6 +22,17 @@ namespace StudentCourses.Data.Configurations
             builder.HasOne(e => e.Course)
                 .WithMany(e => e.UserCourses)
                 .HasForeignKey(e => e.CourseId)
+                .IsRequired();
+
+            //builder.HasOne(e => e.HangfireJobs)
+            //  .WithOne(e => e.UserCourses);
+
+            //builder.HasMany(e => e.HangfireJobs)
+            //      .WithOne(e => e.UserCourses);
+
+            builder.HasMany(e => e.HangfireJobs)
+                .WithOne(e => e.UserCourses)
+                .HasForeignKey(e => e.UserCoursesId)
                 .IsRequired();
         }
     }

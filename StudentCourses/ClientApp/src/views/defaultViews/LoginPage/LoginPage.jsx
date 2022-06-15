@@ -11,17 +11,17 @@ import {
   FormHelperText
 } from '@material-ui/core';
 import {
-    MDBContainer,
-    MDBRow,
-    MDBCol,
-    MDBBtn,
-    MDBInput
-  } from "mdbreact";
+  MDBContainer,
+  MDBRow,
+  MDBCol,
+  MDBBtn,
+  MDBInput
+} from "mdbreact";
 
-function LoadErrors(err){
-  if(typeof err!='object'){
-    return(
-    <FormHelperText error>{err}</FormHelperText>
+function LoadErrors(err) {
+  if (typeof err != 'object') {
+    return (
+      <FormHelperText error>{err}</FormHelperText>
     )
   }
 }
@@ -54,7 +54,7 @@ class Login extends Component {
   };
 
   static getDerivedStateFromProps(nextProps, prevState) {
-  
+
     return { isLoading: nextProps.loading, errorsServer: nextProps.errors };
   }
 
@@ -96,77 +96,77 @@ class Login extends Component {
       const model = {
         email: email,
         password: password
-        };
+      };
 
-      this.props.login(model, this.props.history);     
+      this.props.login(model, this.props.history);
     }
     else {
       this.setState({ errors });
     }
   }
-  
+
   render() {
     const { iconInput, typeInput } = this.state;
     const { errorsServer } = this.state;
-                     
-    const form = (
-   <div className="main-div background-image" style={{backgroundImage:"url("+Background+")"}}> 
-<MDBContainer >
-  <MDBRow style={{height: '100vh' }} className="justify-content-center align-items-center">
-    <MDBCol md="5">
-      <form onSubmit={this.onSubmitForm}>
-        <p className="h5 text-center mb-4">Wellcome!</p>
-        {LoadErrors(errorsServer)}
-        <div className="grey-text">
-          <MDBInput label="Email" 
-          icon="envelope" 
-          group type="email" 
-          validate error="wrong"
-            success="right" 
-            id="email"
-            name="email"
-            required
-            onChange={this.handleChange}/>         
-              <MDBInput
-                label='Password'
-                validate
-                id="password"
-                name="password"
-                type={typeInput}
-                icon={iconInput}
-                required
-                onIconMouseEnter={this.mouseEnter}
-                onIconMouseLeave={this.mouseLeave}
-                onChange={this.handleChange}
-              />
-        </div>
-            <div className="d-flex justify-content-center">
-              <div className="p-2 bd-highlight">
-                <MDBBtn color="brown" type="submit" className="px-3">Log in</MDBBtn>
-              </div>
 
-              <div className="p-2 bd-highlight">
-                <Link to="/register">
-                  <MDBBtn color="brown" className="px-3">Registartion</MDBBtn>
-                </Link>
-              </div>
-            </div>
-      </form>
-    </MDBCol>
-  </MDBRow>
-</MDBContainer>
-</div>
+    const form = (
+      <div className="main-div background-image" style={{ backgroundImage: "url(" + Background + ")" }}>
+        <MDBContainer >
+          <MDBRow style={{ height: '100vh' }} className="justify-content-center align-items-center">
+            <MDBCol md="5">
+              <form onSubmit={this.onSubmitForm}>
+                <p className="h5 text-center mb-4">Wellcome!</p>
+                {LoadErrors(errorsServer)}
+                <div className="grey-text">
+                  <MDBInput label="Email"
+                    icon="envelope"
+                    group type="email"
+                    validate error="wrong"
+                    success="right"
+                    id="email"
+                    name="email"
+                    required
+                    onChange={this.handleChange} />
+                  <MDBInput
+                    label='Password'
+                    validate
+                    id="password"
+                    name="password"
+                    type={typeInput}
+                    icon={iconInput}
+                    required
+                    onIconMouseEnter={this.mouseEnter}
+                    onIconMouseLeave={this.mouseLeave}
+                    onChange={this.handleChange}
+                  />
+                </div>
+                <div className="d-flex justify-content-center">
+                  <div className="p-2 bd-highlight">
+                    <MDBBtn color="brown" type="submit" className="px-3">Log in</MDBBtn>
+                  </div>
+
+                  <div className="p-2 bd-highlight">
+                    <Link to="/register">
+                      <MDBBtn color="brown" className="px-3">Registartion</MDBBtn>
+                    </Link>
+                  </div>
+                </div>
+              </form>
+            </MDBCol>
+          </MDBRow>
+        </MDBContainer>
+      </div>
     );
     return (
-       form
+      form
     );
   }
 }
 
 Login.propTypes =
-  {
-    login: PropTypes.func.isRequired
-  }
+{
+  login: PropTypes.func.isRequired
+}
 
 function mapStateToProps(state) {
   return {
@@ -179,7 +179,7 @@ function mapStateToProps(state) {
 
 const mapDispatch = {
   login: (model, history) => {
-      return loginActions.login(model, history);
+    return loginActions.login(model, history);
   }
 }
 

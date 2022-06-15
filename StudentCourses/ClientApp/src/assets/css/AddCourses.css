@@ -1,0 +1,14 @@
+.imgPrev{
+  height: 300px;
+  background-color: fade(#FFFFFF, 50%);
+  border-color: black;
+}
+.image{
+  height: 100%;
+  width: 100%;
+}
+.imageUpload{
+  display: flex;
+  justify-content: center;
+  align-content: space-around;
+}

@@ -16,21 +16,24 @@ namespace StudentCourses.Data.Configurations
                 .WithOne(e => e.Course);
 
             builder.Property(e => e.Name)
-                .HasMaxLength(64)
+                .HasMaxLength(100)
                 .IsRequired();
 
             builder.Property(e => e.DateStart)
                 .IsRequired();
 
             builder.Property(e => e.ShortDescription)
-                .HasMaxLength(100)
+                .HasMaxLength(200)
                 .IsRequired();
 
             builder.Property(e => e.LongDescription)
-                .HasMaxLength(300)
+                .HasMaxLength(1000)
                 .IsRequired();
 
             builder.Property(e => e.Duration)
+                .IsRequired();
+
+            builder.Property(e => e.Image)
                 .IsRequired();
         }
     }

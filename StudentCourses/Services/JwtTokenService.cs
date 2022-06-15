@@ -28,24 +28,16 @@ namespace StudentCourses.Services
         {
             var roles = _userManager.GetRolesAsync(user).Result;
             roles = roles.OrderBy(x => x).ToList();
-            //var image = user.BaseProfile.Image;
-
-            //if (image == null)
-            //{
-            //    image = _configuration.GetValue<string>("DefaultImage");
-            //}
             List<Claim> claims = new List<Claim>()
             {
                 new Claim("id",user.Id),
                 new Claim("name",user.Name+" "+user.LastName)
-                //new Claim("image",image)
             };
             foreach (var el in roles)
             {
                 claims.Add(new Claim("roles", el));
             }
 
-            //var now = DateTime.UtcNow;
             var signinKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("hello-kitty-secret-key"));
             var signinCredentials = new SigningCredentials(signinKey, SecurityAlgorithms.HmacSha256);
 
