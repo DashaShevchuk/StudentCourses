@@ -62,7 +62,7 @@ namespace StudentCourses.Data.Features.Users
                     PhoneNumber = item.PhoneNumber,
                 };
 
-                IEnumerable<GetCoursesModel> userCourses = courseQueries.GetUserCourses(item.Id);
+                IEnumerable<CourseModel> userCourses = courseQueries.GetUserCourses(item.Id);
                 user.UserCourses = userCourses;
 
                 resultUsers.Add(user);

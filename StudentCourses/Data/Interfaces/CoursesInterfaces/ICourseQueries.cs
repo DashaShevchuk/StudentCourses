@@ -9,9 +9,9 @@ namespace StudentCourses.Data.Interfaces.CoursesInterfaces
 {
     public interface ICourseQueries
     {
-        IEnumerable<GetCoursesModel> GetCourses(string userId);
+        IEnumerable<CourseModel> GetCourses(string userId);
 
-        IEnumerable<GetCoursesModel> GetUserCourses(string userId);
+        IEnumerable<CourseModel> GetUserCourses(string userId);
 
         Course FindCourseById(int id);
 

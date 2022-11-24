@@ -12,9 +12,9 @@ namespace StudentCourses.Data.Interfaces.CoursesInterfaces
 {
     public interface ICourseService
     {
-        IEnumerable<GetCoursesModel> GetCourses();
+        public GetCoursesModel GetCourses(CoursesPageModel model);
 
-        IEnumerable<GetCoursesModel> GetUserCourses(string userId);
+        IEnumerable<CourseModel> GetUserCourses(string userId);
 
         HttpStatusCode AddCourse(AddCourseModel model);
 

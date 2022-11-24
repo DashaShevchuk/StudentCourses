@@ -29,13 +29,13 @@ namespace StudentCourses.Data.Features.Courses
             return context.Course.FirstOrDefault(x => x.Id == id);
         }
 
-        public IEnumerable<GetCoursesModel> GetCourses(string userId)
+        public IEnumerable<CourseModel> GetCourses(string userId)
         {
             string path = $"{configuration.GetValue<string>("CoursesUrlImages")}/";
-            List<GetCoursesModel> courses = new List<GetCoursesModel>();
+            List<CourseModel> courses = new List<CourseModel>();
             foreach(var item in context.Course)
             {
-                GetCoursesModel course = new GetCoursesModel
+                CourseModel course = new CourseModel
                 {
                     Id = item.Id,
                     Name = item.Name,
@@ -61,10 +61,10 @@ namespace StudentCourses.Data.Features.Courses
             return courses;
         }
 
-        public IEnumerable<GetCoursesModel> GetUserCourses(string userId)
+        public IEnumerable<CourseModel> GetUserCourses(string userId)
         {
             string path = $"{configuration.GetValue<string>("CoursesUrlImages")}/";
-            IEnumerable<GetCoursesModel> courses = context.UserCourse.Where(x => x.UserId == userId).Select(c => new GetCoursesModel
+            IEnumerable<CourseModel> courses = context.UserCourse.Where(x => x.UserId == userId).Select(c => new CourseModel
             {
                 Id = c.Course.Id,
                 Name = c.Course.Name,

@@ -75,12 +75,12 @@ namespace StudentCourses.Controllers
 
         [HttpGet]
         [Route("get/courses")]
-        public IActionResult GetCourses()
+        public IActionResult GetCourses([FromBody] CoursesPageModel model)
         {
             //var claims = User.Claims;
             //var userId = claims.FirstOrDefault().Value;
 
-            var courses = courseService.GetCourses();
+            var courses = courseService.GetCourses(model);
             if (courses == null)
             {
                 return BadRequest();

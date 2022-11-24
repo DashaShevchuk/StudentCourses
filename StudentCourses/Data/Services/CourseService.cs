@@ -45,13 +45,24 @@ namespace StudentCourses.Data.Services
             return contextAccessor.HttpContext.User.Claims.FirstOrDefault().Value;
         }
 
-        public IEnumerable<GetCoursesModel> GetCourses()
+        public GetCoursesModel GetCourses(CoursesPageModel model)
         {
             var userId = GetCurrentUserId();
-            return courseQueries.GetCourses(userId);
+            //return courseQueries.GetCourses(userId);
+
+            IEnumerable<CourseModel> courses = courseQueries.GetCourses(userId);
+            int count = courses.Count();
+
+            var resultModel = new GetCoursesModel
+            {
+                Courses = courses.ToList(),
+                TotalCount = count
+            };
+
+            return resultModel;
         }
 
-        public IEnumerable<GetCoursesModel> GetUserCourses(string userId)
+        public IEnumerable<CourseModel> GetUserCourses(string userId)
         {
             return courseQueries.GetUserCourses(userId);
         }

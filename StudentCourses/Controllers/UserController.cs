@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using StudentCourses.Data.Interfaces.CoursesInterfaces;
 using StudentCourses.Data.Interfaces.UserInterfaces;
+using StudentCourses.Data.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,9 +28,9 @@ namespace StudentCourses.Controllers
 
         [HttpGet]
         [Route("get/allcourses")]
-        public IActionResult GetAllCourses()
+        public IActionResult GetAllCourses([FromBody] CoursesPageModel model)
         {
-            var courses = courseService.GetCourses();
+            var courses = courseService.GetCourses(model);
             if (courses == null)
             {
                 return BadRequest();

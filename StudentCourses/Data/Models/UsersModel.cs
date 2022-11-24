@@ -21,6 +21,6 @@ namespace StudentCourses.Data.Models
         
         public string PhoneNumber { get; set; }
 
-        public IEnumerable<GetCoursesModel> UserCourses { get; set; }
+        public IEnumerable<CourseModel> UserCourses { get; set; }
     }
 }

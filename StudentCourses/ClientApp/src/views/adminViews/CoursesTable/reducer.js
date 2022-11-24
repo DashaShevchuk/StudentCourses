@@ -25,10 +25,10 @@ const initialState = {
     },
 }
 
-export const getCourses = () => {
+export const getCourses = (model) => {
     return (dispatch) => {
         dispatch(getListActions.started());
-        CoursesTableService.getCourses()
+        CoursesTableService.getCourses(model)
             .then((response) => {
                 console.log("response", response);
                 dispatch(getListActions.success(response));

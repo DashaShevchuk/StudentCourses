@@ -105,46 +105,46 @@ class CoursesTable extends Component {
   }
 
   showMoreDialog = () => {
-    const { listCourses } = this.props;
-    var name, image, duration, longDescription, shortDescription, dateStart;
-    listCourses.forEach(element => {
-      if (element.Id == this.state.selectedCourseId) {
-        name = element.Name;
-        image = element.Image;
-        duration = element.Duration;
-        longDescription = element.LongDescription;
-        shortDescription = element.ShortDescription;
-        dateStart = element.TextDateStart;
-      }
-    });
-    return (
-      <Modal
-        visible={this.state.showMoreOpenDialog}
-        onCancel={this.showMoreDialogCloseClick}
-        footer={null}
-        title={name}
-      >
-        <Form>
-          <Form.Item>
-            <Image width={470} height={250} src={`${serverUrl}${image}`} />
-            <TextArea size="large" rows={3} value={shortDescription} />
-          </Form.Item>
-          <Form.Item>
-            <label>Course about:</label>
-            <TextArea size="large" rows={10} className='m-0' value={longDescription} />
-          </Form.Item>
-          <Form.Item>
-            <label>Duration:</label>
-            <Input size="large" value={duration + " weeks"} />
-          </Form.Item>
-          <Form.Item>
-            <label>Date start:</label>
-            <br />
-            <DatePicker size="large" value={moment(dateStart, dateFormat)} format={dateFormat} disabled />
-          </Form.Item>
-        </Form>
-      </Modal>
-    );
+    // const { data } = this.props;
+    // var name, image, duration, longDescription, shortDescription, dateStart;
+    // data.Courses.forEach(element => {
+    //   if (element.Id == this.state.selectedCourseId) {
+    //     name = element.Name;
+    //     image = element.Image;
+    //     duration = element.Duration;
+    //     longDescription = element.LongDescription;
+    //     shortDescription = element.ShortDescription;
+    //     dateStart = element.TextDateStart;
+    //   }
+    // });
+    // return (
+    //   <Modal
+    //     visible={this.state.showMoreOpenDialog}
+    //     onCancel={this.showMoreDialogCloseClick}
+    //     footer={null}
+    //     title={name}
+    //   >
+    //     <Form>
+    //       <Form.Item>
+    //         <Image width={470} height={250} src={`${serverUrl}${image}`} />
+    //         <TextArea size="large" rows={3} value={shortDescription} />
+    //       </Form.Item>
+    //       <Form.Item>
+    //         <label>Course about:</label>
+    //         <TextArea size="large" rows={10} className='m-0' value={longDescription} />
+    //       </Form.Item>
+    //       <Form.Item>
+    //         <label>Duration:</label>
+    //         <Input size="large" value={duration + " weeks"} />
+    //       </Form.Item>
+    //       <Form.Item>
+    //         <label>Date start:</label>
+    //         <br />
+    //         <DatePicker size="large" value={moment(dateStart, dateFormat)} format={dateFormat} disabled />
+    //       </Form.Item>
+    //     </Form>
+    //   </Modal>
+    // );
   }
 
   onImageChange = e => {
@@ -158,151 +158,153 @@ class CoursesTable extends Component {
   };
 
   editDialog = () => {
-    const { listCourses } = this.props;
+    const { data } = this.props;
     var id, name, duration, longDescription, shortDescription, dateStart, image;
 
-    listCourses.forEach(element => {
-      if (element.Id == this.state.selectedCourseId) {
-        name = element.Name;
-        image = element.Image;
-        duration = element.Duration;
-        longDescription = element.LongDescription;
-        shortDescription = element.ShortDescription;
-        dateStart = element.TextDateStart;
-        id = element.Id;
+    // data.Courses.forEach(element => {
+    //   if (element.Id == this.state.selectedCourseId) {
+    //     name = element.Name;
+    //     image = element.Image;
+    //     duration = element.Duration;
+    //     longDescription = element.LongDescription;
+    //     shortDescription = element.ShortDescription;
+    //     dateStart = element.TextDateStart;
+    //     id = element.Id;
 
-        console.log(image);
-        this.state.name = name;
-        this.state.image = image;
-        this.state.duration = duration;
-        this.state.longDescription = longDescription;
-        this.state.shortDescription = shortDescription;
-        this.state.dateStart = dateStart;
-        this.state.id = id;
-      }
-    });
-    return (
-      <Modal
-        visible={this.state.editOpenDialog}
-        onCancel={this.editDialogCloseClick}
-        footer={null}
-        title={'Edit course'}
-      >
-        <form
-          onSubmit={this.editOnSubmit}>
-          <Form.Item>
-            <Image width={470} height={250} src={`${serverUrl}${image}`} />
-            <input type="file" accept="image/*" style={{ display: 'none' }} id="contained-button-file" onChange={(e) => { this.onImageChange(e) }} />
-            <label htmlFor="contained-button-file">
-              <Button variant="contained" color="primary" component="span" class="ant-btn ant-btn-primary">
-                <UploadOutlined />
-                Change image
-              </Button>
-            </label>
-          </Form.Item>
-          <Form.Item>
-            <label>Name:</label>
-            <TextArea showCount maxLength={100} defaultValue={name} onChange={(e) => { this.state.name = e.target.value }} />
-          </Form.Item>
-          <Form.Item>
-            <label>Short description:</label>
-            <TextArea rows={3} showCount maxLength={200} defaultValue={shortDescription} onChange={(e) => { this.state.shortDescription = e.target.value }} />
-          </Form.Item>
-          <Form.Item>
-            <label>Long description:</label>
-            <TextArea rows={10} showCount maxLength={1000} defaultValue={longDescription} onChange={(e) => { this.state.longDescription = e.target.value }} />
-          </Form.Item>
-          <Row>
-            <Col span={8}>
-              <Form.Item>
-                <label>Duration:</label>
-                <br />
-                <InputNumber min={1} max={52} defaultValue={duration} onChange={(e) => { this.state.duration = e }} />
-                <span className="ant-form-text"> weeks</span>
-              </Form.Item>
-            </Col>
-            <Col span={8}>
-              <Form.Item>
-                <label>Date start:</label>
-                <br />
-                <DatePicker maxLength={2} defaultValue={moment(dateStart, dateFormat)} format={dateFormat} onChange={d => this.state.dateStart = d} />
-              </Form.Item>
-            </Col>
-          </Row>
-          <Form.Item>
-            <button class="ant-btn ant-btn-primary" type="submit">Save</button>
-          </Form.Item>
-        </form>
-      </Modal>
-    );
-  }
+    //     console.log(image);
+    //     this.state.name = name;
+    //     this.state.image = image;
+    //     this.state.duration = duration;
+    //     this.state.longDescription = longDescription;
+    //     this.state.shortDescription = shortDescription;
+    //     this.state.dateStart = dateStart;
+    //     this.state.id = id;
+    //   }
+    // });
+    
+    return //(
+  //     <Modal
+  //       visible={this.state.editOpenDialog}
+  //       onCancel={this.editDialogCloseClick}
+  //       footer={null}
+  //       title={'Edit course'}
+  //     >
+  //       <form
+  //         onSubmit={this.editOnSubmit}>
+  //         <Form.Item>
+  //           <Image width={470} height={250} src={`${serverUrl}${image}`} />
+  //           <input type="file" accept="image/*" style={{ display: 'none' }} id="contained-button-file" onChange={(e) => { this.onImageChange(e) }} />
+  //           <label htmlFor="contained-button-file">
+  //             <Button variant="contained" color="primary" component="span" class="ant-btn ant-btn-primary">
+  //               <UploadOutlined />
+  //               Change image
+  //             </Button>
+  //           </label>
+  //         </Form.Item>
+  //         <Form.Item>
+  //           <label>Name:</label>
+  //           <TextArea showCount maxLength={100} defaultValue={name} onChange={(e) => { this.state.name = e.target.value }} />
+  //         </Form.Item>
+  //         <Form.Item>
+  //           <label>Short description:</label>
+  //           <TextArea rows={3} showCount maxLength={200} defaultValue={shortDescription} onChange={(e) => { this.state.shortDescription = e.target.value }} />
+  //         </Form.Item>
+  //         <Form.Item>
+  //           <label>Long description:</label>
+  //           <TextArea rows={10} showCount maxLength={1000} defaultValue={longDescription} onChange={(e) => { this.state.longDescription = e.target.value }} />
+  //         </Form.Item>
+  //         <Row>
+  //           <Col span={8}>
+  //             <Form.Item>
+  //               <label>Duration:</label>
+  //               <br />
+  //               <InputNumber min={1} max={52} defaultValue={duration} onChange={(e) => { this.state.duration = e }} />
+  //               <span className="ant-form-text"> weeks</span>
+  //             </Form.Item>
+  //           </Col>
+  //           <Col span={8}>
+  //             <Form.Item>
+  //               <label>Date start:</label>
+  //               <br />
+  //               <DatePicker maxLength={2} defaultValue={moment(dateStart, dateFormat)} format={dateFormat} onChange={d => this.state.dateStart = d} />
+  //             </Form.Item>
+  //           </Col>
+  //         </Row>
+  //         <Form.Item>
+  //           <button class="ant-btn ant-btn-primary" type="submit">Save</button>
+  //         </Form.Item>
+  //       </form>
+  //     </Modal>
+  //   );
+  // }
 
-  deleteDialog = () => {
-    const { listCourses } = this.props;
-    var name;
-    listCourses.forEach(element => {
-      if (element.Id == this.state.selectedCourseId) {
-        name = element.Name;
-      }
-    });
-    return (
-      <Modal
-        visible={this.state.deleteOpenDialog}
-        onCancel={this.deleteDialogCloseClick}
-        onOk={this.deleteButtonClicked}
-        title={'Do you Want to delete these course?'}
-      >
-        <p>Do you want to delete {name}?</p>
-      </Modal>
-    );
+  // deleteDialog = () => {
+  //   const { data } = this.props;
+  //   var name;
+  //   data.Courses.forEach(element => {
+  //     if (element.Id == this.state.selectedCourseId) {
+  //       name = element.Name;
+  //     }
+  //   });
+  //   return (
+  //     <Modal
+  //       visible={this.state.deleteOpenDialog}
+  //       onCancel={this.deleteDialogCloseClick}
+  //       onOk={this.deleteButtonClicked}
+  //       title={'Do you Want to delete these course?'}
+  //     >
+  //       <p>Do you want to delete {name}?</p>
+  //     </Modal>
+   // );
   }
 
 
   render() {
-    const { listCourses } = this.props;
-    const columns = [
-      {
-        title: '№',
-        dataIndex: 'num',
-        key: 'num'
-      },
-      {
-        title: 'Name',
-        dataIndex: 'name',
-        key: 'name'
-      },
-      {
-        title: 'Actions',
-        key: 'actions',
-        render: (record) => (
-          <Space size="middle">
-            <EditOutlined onClick={(e) => { this.editDialogClickOpen(record, e) }} />
-            <DeleteOutlined onClick={(e) => { this.deleteDialogClickOpen(record, e) }} style={{ color: 'red' }} />
-          </Space>
-        ),
-      },
-    ];
-    let i = 0;
-    const data = [];
-    {
-      listCourses.forEach(element => {
-        let item = {
-          id: ' ',
-          key: ' ',
-          name: ' ',
-        }
+    const { data } = this.props;
+    console.log(data);
+    // const columns = [
+    //   {
+    //     title: '№',
+    //     dataIndex: 'num',
+    //     key: 'num'
+    //   },
+    //   {
+    //     title: 'Name',
+    //     dataIndex: 'name',
+    //     key: 'name'
+    //   },
+    //   {
+    //     title: 'Actions',
+    //     key: 'actions',
+    //     render: (record) => (
+    //       <Space size="middle">
+    //         <EditOutlined onClick={(e) => { this.editDialogClickOpen(record, e) }} />
+    //         <DeleteOutlined onClick={(e) => { this.deleteDialogClickOpen(record, e) }} style={{ color: 'red' }} />
+    //       </Space>
+    //     ),
+    //   },
+    // ];
+    // let i = 0;
+    // const listCourses = [];
+    // {
+    //   data.forEach(element => {
+    //     let item = {
+    //       id: ' ',
+    //       key: ' ',
+    //       name: ' ',
+    //     }
 
-        i += 1;
-        item.key = element.Id;
-        item.num = i;
-        item.name = element.Name;
-        data.push(item);
-      });
-    }
+    //     i += 1;
+    //     item.key = element.Id;
+    //     item.num = i;
+    //     item.name = element.Name;
+    //     listCourses.push(item);
+    //   });
+    // }
     return (
       <div>
-        <Table
-          dataSource={data}
+        {/* <Table
+          dataSource={listCourses}
           columns={columns}
           pagination={false}
           onClick={this.key}
@@ -312,7 +314,7 @@ class CoursesTable extends Component {
                 this.showMoreDialogClickOpen(record);
               },
             };
-          }} />
+          }} /> */}
 
         {this.deleteDialog()}
         {this.editDialog()}
@@ -324,14 +326,14 @@ class CoursesTable extends Component {
 
 const mapStateToProps = state => {
   return {
-    listCourses: get(state, 'coursesTable.list.data')
+    data: get(state, 'coursesTable.list.data')
   };
 }
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    getCourses: () => {
-      dispatch(getListActions.getCourses());
+    getCourses: filter => {
+      dispatch(getListActions.getCourses(filter));
     },
     deleteCourse: filter => {
       dispatch(getDeleteListActions.deleteCourse(filter));

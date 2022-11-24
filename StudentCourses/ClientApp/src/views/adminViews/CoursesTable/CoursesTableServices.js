@@ -2,8 +2,8 @@ import axios from "axios";
 import {serverUrl} from '../../../config';
 
 export default class CoursesTableService {
-    static getCourses() {
-        return axios.get(`${serverUrl}api/admin/get/courses`)
+    static getCourses(model) {
+        return axios.get(`${serverUrl}api/admin/get/courses/`,model)
     };
     static deleteCourse(model) {
         return axios.delete(`${serverUrl}api/admin/delete/course/${model.courseId}`)
