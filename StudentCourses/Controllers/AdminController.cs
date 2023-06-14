@@ -73,13 +73,10 @@ namespace StudentCourses.Controllers
             return StatusCode((int)addCourseResult);
         }
 
-        [HttpGet]
+        [HttpPost]
         [Route("get/courses")]
         public IActionResult GetCourses([FromBody] CoursesPageModel model)
         {
-            //var claims = User.Claims;
-            //var userId = claims.FirstOrDefault().Value;
-
             var courses = courseService.GetCourses(model);
             if (courses == null)
             {

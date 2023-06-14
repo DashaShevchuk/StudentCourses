@@ -95,7 +95,7 @@ function getUrlToRedirect() {
   let path = "";
   if (Array.isArray(roles)) {
     for (let i = 0; i < roles.length; i++) {
-      if (roles[i] == "User") {
+      if (roles[i] === "User") {
         path = "/user/allcourses";
         break;
       } else if (roles[i] === "Admin") {
@@ -104,7 +104,7 @@ function getUrlToRedirect() {
       }
     }
   } else {
-    if (roles == "User") {
+    if (roles === "User") {
       path = "/user/allcourses";
     } else if (roles === "Admin") {
       path = "/admin/users";

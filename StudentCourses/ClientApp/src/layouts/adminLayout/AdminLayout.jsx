@@ -6,15 +6,12 @@ import get from "lodash.get";
 import { logout } from '../../views/defaultViews/LoginPage/reducer';
 
 import {
-  AppAside,
-  AppFooter,
   AppHeader,
   AppSidebar,
   AppSidebarFooter,
   AppSidebarForm,
   AppSidebarHeader,
   AppSidebarMinimizer,
-  AppBreadcrumb2 as AppBreadcrumb,
   AppSidebarNav2 as AppSidebarNav,
 } from '@coreui/react';
 // sidebar nav config
@@ -40,7 +37,7 @@ class AdminLayout extends Component {
 
   render() {
     const { login } = this.props;
-    console.log(login);
+    console.log("login",login);
     let isAccess = false;
     if (login.isAuthenticated === undefined) {
       console.log(login.isAuthenticated);

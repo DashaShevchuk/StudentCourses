@@ -1,11 +1,11 @@
 import React, { Suspense, Component } from 'react';
 import { Route, Switch, HashRouter as Router } from "react-router-dom";
-import './App.scss';
+// import './App.scss';
 import 'primereact/resources/themes/nova-light/theme.css';
 import 'primereact/resources/primereact.min.css';
 import 'primeicons/primeicons.css';
 import 'antd/dist/antd.css';
-
+// import './scss/style.scss';
 // Pages
 const LoginPage = React.lazy(() => import("./views/defaultViews/LoginPage/LoginPage"));
 const RegistrationPage = React.lazy(() => import("./views/defaultViews/RegisterPage/RegisterPage"));

@@ -28,11 +28,23 @@ class CoursesTable extends Component {
     shortDescription: '',
     longDescription: '',
     duration: 0,
-    id: 0
+    id: 0,
+
+    sortOrder: null,
+    columnKey: null,
+    searchString: null,
+    pagination: {
+      current: 1,
+      pageSize: 10,
+    },
   };
 
   componentDidMount = () => {
-    this.props.getCourses();
+    const model = {
+      Current: this.state.pagination.current,
+      PageSize: this.state.pagination.pageSize,
+    }
+    this.props.getCourses(model);
   }
 
   showMoreDialogClickOpen = (e) => {
@@ -262,63 +274,58 @@ class CoursesTable extends Component {
   render() {
     const { data } = this.props;
     console.log(data);
-    // const columns = [
-    //   {
-    //     title: '№',
-    //     dataIndex: 'num',
-    //     key: 'num'
-    //   },
-    //   {
-    //     title: 'Name',
-    //     dataIndex: 'name',
-    //     key: 'name'
-    //   },
-    //   {
-    //     title: 'Actions',
-    //     key: 'actions',
-    //     render: (record) => (
-    //       <Space size="middle">
-    //         <EditOutlined onClick={(e) => { this.editDialogClickOpen(record, e) }} />
-    //         <DeleteOutlined onClick={(e) => { this.deleteDialogClickOpen(record, e) }} style={{ color: 'red' }} />
-    //       </Space>
-    //     ),
-    //   },
-    // ];
-    // let i = 0;
-    // const listCourses = [];
-    // {
-    //   data.forEach(element => {
-    //     let item = {
-    //       id: ' ',
-    //       key: ' ',
-    //       name: ' ',
-    //     }
+    const columns = [
+      {
+        title: '№',
+        dataIndex: 'num',
+        key: 'num'
+      },
+      {
+        title: 'Name',
+        dataIndex: 'name',
+        key: 'name'
+      },
+      {
+        title: 'Actions',
+        key: 'actions',
+        render: (record) => (
+          <Space size="middle">
+            <EditOutlined onClick={(e) => { this.editDialogClickOpen(record, e) }} />
+            <DeleteOutlined onClick={(e) => { this.deleteDialogClickOpen(record, e) }} style={{ color: 'red' }} />
+          </Space>
+        ),
+      },
+    ];
 
-    //     i += 1;
-    //     item.key = element.Id;
-    //     item.num = i;
-    //     item.name = element.Name;
-    //     listCourses.push(item);
-    //   });
-    // }
+    // const listCourses = data.Courses.map((element, index) => {
+
+    //   let dateStart = new Date(element.DateStart);
+    //   let date = dateStart.toLocaleDateString();
+    //   return {
+    //     key: element.Id,
+    //     name: element.Name,
+    //     shortDescription: element.ShortDescription,
+    //     longDescription: element.LongDescription,
+    //     dateStart: date,
+    //     duration: element.Duration,
+    //     image:element.Image,
+    //     num: index + 1
+    //   };
+    // });
+
+    //console.log(listCourses);
     return (
       <div>
+        <p>a</p>
         {/* <Table
-          dataSource={listCourses}
           columns={columns}
-          pagination={false}
-          onClick={this.key}
-          onRow={(record) => {
-            return {
-              onClick: () => {
-                this.showMoreDialogClickOpen(record);
-              },
-            };
-          }} /> */}
+          dataSource={listCourses}
+          total={data.TotalCount}         
+        /> */}
 
-        {this.deleteDialog()}
+        {/* {this.deleteDialog()}
         {this.editDialog()}
-        {this.showMoreDialog()}
+        {this.showMoreDialog()} */}
       </div>
     );
   }

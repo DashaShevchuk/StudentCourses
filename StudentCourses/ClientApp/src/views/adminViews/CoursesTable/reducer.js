@@ -18,7 +18,7 @@ export const IMAGE_FAILED = "IMAGE_FAILED";
 
 const initialState = {
     list: {
-        data: [],
+        data: null,
         loading: false,
         success: false,
         failed: false,

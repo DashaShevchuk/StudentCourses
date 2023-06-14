@@ -26,7 +26,7 @@ namespace StudentCourses.Services.EmailSender
                 client.UseDefaultCredentials = false;
                 client.Credentials = new NetworkCredential("student.courses00@gmail.com", "Qwerty-1");
                 client.Host = "smtp.gmail.com";
-                client.Port = 587;
+                client.Port = 587;fix
                 client.DeliveryMethod = SmtpDeliveryMethod.Network;
 
                 try
